@@ -129,13 +129,13 @@ cor(Y, Y_hat)
 
 ## Data Format
 
-Each row of `count`:
+Each row of `count` represents one non-zero document-term entry.
 
-  column   description
-  -------- --------------------------
-  d        document index (0-based)
-  v        word index (0-based)
-  c        count
+| column | description |
+|---|---|
+| d | document index (0-based) |
+| v | word index (0-based) |
+| c | token count |
 
 ------------------------------------------------------------------------
 
