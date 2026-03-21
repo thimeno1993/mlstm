@@ -23,20 +23,20 @@ stm_vi_parallel(
 \arguments{
 \item{mod}{A list containing the current model state:
 \describe{
-  \item{nd}{D×K matrix of document–topic counts.}
-  \item{nw}{K×V matrix of topic–word counts.}
+  \item{nd}{D x K matrix of document-topic counts.}
+  \item{nw}{K x V matrix of topic-word counts.}
   \item{eta}{Numeric vector of length K; regression coefficients.}
   \item{sigma2}{Scalar noise variance for the Gaussian response.}
 }}
 
-\item{docs}{IntegerMatrix of size NZ×3, where each row is a triple
+\item{docs}{IntegerMatrix of size NZ x 3, where each row is a triple
 (d, v, c) in 0-based indexing: document index d, word index v,
-and count c = n_{d,v}. Rows with d outside [0, D-1] are ignored.}
+and count c = n_dv. Rows with d outside [0, D-1] are ignored.}
 
 \item{y}{NumericVector of length D; response y_d for each document.}
 
 \item{ndsum}{IntegerVector of length D; total token count per document
-(i.e., ndsum[d] = sum_v n_{d,v}).}
+(that is, ndsum[d] = sum_v n_dv).}
 
 \item{NZ}{Integer, number of non-zero entries in docs (rows of docs).}
 
@@ -44,17 +44,17 @@ and count c = n_{d,v}. Rows with d outside [0, D-1] are ignored.}
 
 \item{K}{Integer, number of topics.}
 
-\item{alpha}{Scalar Dirichlet prior parameter for document–topic
-distributions θ_d (symmetric prior with parameter α).}
+\item{alpha}{Scalar Dirichlet prior parameter for document-topic
+distributions theta_d (symmetric prior with parameter alpha).}
 
-\item{beta}{Scalar Dirichlet prior parameter for topic–word
-distributions β_k (symmetric prior with parameter β).}
+\item{beta}{Scalar Dirichlet prior parameter for topic-word
+distributions phi_k (symmetric prior with parameter beta).}
 
-\item{update_sigma}{Logical; if TRUE, update the noise variance σ²
-from residuals y_d - zbar_d^T eta otherwise keep σ² fixed.}
+\item{update_sigma}{Logical; if TRUE, update the noise variance sigma2
+from residuals y_d - zbar_d^T eta, otherwise keep sigma2 fixed.}
 
 \item{tau}{Numeric, log-space cutoff used to prune very small topic
-responsibilities φ_{d,i,k} for numerical stability and efficiency.}
+responsibilities phi[d,i,k] for numerical stability and efficiency.}
 
 \item{show_progress}{Logical; if TRUE, print simple progress output
 during the E-step over documents.}
@@ -66,8 +66,8 @@ more memory.}
 \value{
 A list with updated variational parameters and diagnostics:
   \describe{
-    \item{nd}{Updated D×K document–topic counts.}
-    \item{nw}{Updated K×V topic–word counts.}
+    \item{nd}{Updated D x K document-topic counts.}
+    \item{nw}{Updated K x V topic-word counts.}
     \item{eta}{Updated K-dimensional regression coefficient vector.}
     \item{sigma2}{Updated scalar noise variance.}
     \item{elbo}{Scalar evidence lower bound (approximate).}
@@ -76,10 +76,11 @@ A list with updated variational parameters and diagnostics:
 }
 \description{
 The model combines unsupervised topic modeling (LDA) with a Gaussian
-response on the document-level topic proportions z̄_d:
-\deqn{y_d \mid zbar_d, eta \sigma^2 \sim N(zbar_d^T eta\ \sigma^2).}
+response on document-level topic proportions.
 }
 \details{
+\deqn{y_d \sim N(zbar_d^T eta, sigma^2).}
+
 This function performs one variational inference sweep with a parallel
 document-level E-step and simple updates for the regression parameters.
 }

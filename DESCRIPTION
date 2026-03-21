@@ -15,7 +15,8 @@ Imports:
     Rcpp,
     Matrix,
     data.table,
-    RcppParallel
+    RcppParallel,
+    stats
 LinkingTo:
     Rcpp,
     RcppArmadillo,

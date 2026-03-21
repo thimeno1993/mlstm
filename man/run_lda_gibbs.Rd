@@ -17,22 +17,22 @@ run_lda_gibbs(
 )
 }
 \arguments{
-\item{count}{Integer matrix of size NZ × 3 with rows (d, v, c) in 0-based
+\item{count}{Integer matrix of size NZ x 3 with rows (d, v, c) in 0-based
 indexing: document index \code{d}, word index \code{v}, and count
 \code{c} for that pair.}
 
 \item{K}{Integer, number of topics. Required unless \code{phi} is supplied.
 If \code{phi} is provided, \code{K} is inferred from \code{ncol(phi)}.}
 
-\item{alpha}{Scalar Dirichlet prior parameter for document–topic
+\item{alpha}{Scalar Dirichlet prior parameter for document-topic
 distributions.}
 
-\item{beta}{Scalar Dirichlet prior parameter for topic–word
+\item{beta}{Scalar Dirichlet prior parameter for topic-word
 distributions.}
 
 \item{n_iter}{Integer, number of Gibbs sweeps to run.}
 
-\item{phi}{Optional V × K topic–word probability matrix used only for
+\item{phi}{Optional V x K topic-word probability matrix used only for
 initializing topic assignments in \code{init_mod_from_count()}.}
 
 \item{seed}{Optional integer random seed passed to the initializer.}
@@ -45,13 +45,13 @@ initializing topic assignments in \code{init_mod_from_count()}.}
 A list \code{mod} containing:
   \describe{
     \item{z}{Integer vector of length NZ; final topic assignments (0-based).}
-    \item{nd}{D × K document–topic count matrix.}
-    \item{nw}{K × V topic–word count matrix.}
+    \item{nd}{D x K document-topic count matrix.}
+    \item{nw}{K x V topic-word count matrix.}
     \item{ndsum}{Integer vector of length D; document token counts.}
     \item{nwsum}{Integer vector of length K; topic token counts.}
-    \item{phi}{V × K topic–word posterior mean
+    \item{phi}{V x K topic-word posterior mean
       \eqn{p(w \mid z=k)} computed from \code{nw}.}
-    \item{theta}{D × K document–topic posterior mean
+    \item{theta}{D x K document-topic posterior mean
       \eqn{p(z=k \mid d)} computed from \code{nd}.}
     \item{loglik_trace}{Vector of log-likelihoods.}
     \item{D}{Number of documents.}
@@ -62,12 +62,12 @@ A list \code{mod} containing:
 }
 \description{
 This function performs collapsed Gibbs sampling for the standard LDA model
-using a sparse document–term representation:
+using a sparse document-term representation:
 \enumerate{
   \item initializes the LDA state via \code{init_mod_from_count()},
   \item runs \code{n_iter} iterations of the C++ Gibbs kernel
         \code{eLDA_pass_b_fast()},
-  \item returns the final model state, including posterior topic–word
-        and document–topic distributions.
+  \item returns the final model state, including posterior topic-word
+        and document-topic distributions.
 }
 }

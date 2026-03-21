@@ -289,46 +289,47 @@ struct DocWorker : public Worker {
 // Main routine
 // -----------------------------------------------------------------------------
 
-//' Variational inference for multi-output supervised LDA with hierarchical prior
-//' (parallel E-step over documents).
+//' Variational inference for multi-output supervised topic models
+//' with hierarchical prior.
 //'
-//' The model is:
-//'   - Standard LDA for documents: θ_d ~ Dir(α), φ_k ~ Dir(β).
-//'   - Supervised Gaussian layer: y_{d,j} | z̄_d, η_j, σ_j^2 ~ N(z̄_d^T η_j, σ_j^2).
-//'   - Hierarchical prior on regression coefficients:
-//'         η_j ~ N(μ, Λ^{-1}),   Λ ~ IW(upsilon, Ω).
+//' The model includes:
+//'   - LDA structure: theta_d ~ Dir(alpha), phi_k ~ Dir(beta)
+//'   - Gaussian response: y[d,j] ~ N(zbar_d^T eta_j, sigma_j^2)
+//'   - Hierarchical prior:
+//'       eta_j ~ N(mu, Lambda^-1)
+//'       Lambda ~ inverse-Wishart(upsilon, Omega)
 //'
 //' @param mod List with model state:
-//'   - nd  (D × K) document-topic counts
-//'   - nw  (K × V) topic-word counts
-//'   - eta (K × J) regression coefficients η_j
-//'   - sigma2 (J)  per-output noise variance σ_j^2
-//' @param docs IntegerMatrix (NZ × 3) with 0-based triples (doc_id, word_id, count).
-//' @param y    NumericMatrix (D × J) response matrix (NA to skip y_{d,j}).
-//' @param ndsum IntegerVector (D) total token count per document.
-//' @param NZ,V,K,J Model sizes (#nonzeros, vocabulary size, topics, responses).
-//' @param alpha,beta Dirichlet hyperparameters for θ and φ.
-//' @param mu    NumericVector (K) prior mean μ for η_j.
-//' @param upsilon double, degrees of freedom for inverse-Wishart prior on Λ.
-//' @param Omega NumericMatrix (K × K) prior scale matrix for inverse-Wishart.
-//' @param update_sigma Logical: update σ_j^2 (true) or keep fixed (false).
-//' @param tau  Numeric log-cutoff used to prune small φ entries for stability/speed.
-//' @param exact_second_moment Logical: if true, use exact E[z̄ z̄ᵀ]; if false, use X Xᵀ approximation.
-//' @param show_progress Logical: print progress information during E-step.
-//' @param chunk Number of documents processed per parallel chunk.
+//'   - nd  (D x K) document-topic counts
+//'   - nw  (K x V) topic-word counts
+//'   - eta (K x J) regression coefficients
+//'   - sigma2 (J) noise variances
+//' @param docs IntegerMatrix (NZ x 3) with (doc_id, word_id, count).
+//' @param y NumericMatrix (D x J) response matrix.
+//' @param ndsum IntegerVector (D) document token counts.
+//' @param NZ,V,K,J Model dimensions.
+//' @param alpha,beta Dirichlet hyperparameters.
+//' @param mu NumericVector (K) prior mean.
+//' @param upsilon Degrees of freedom for inverse-Wishart.
+//' @param Omega Scale matrix for inverse-Wishart.
+//' @param update_sigma Logical; update sigma2 or not.
+//' @param tau Numeric cutoff for stability.
+//' @param exact_second_moment Logical flag (currently not used).
+//' @param show_progress Logical; print progress.
+//' @param chunk Integer; documents per parallel block.
 //'
-//' @return List with updated variational parameters and diagnostics:
-//'   - nd            (D × K) updated document-topic counts
-//'   - nw            (K × V) updated topic-word counts
-//'   - eta           (K × J) posterior mean E_q[η_j]
-//'   - eta_se        (K × J) approximate standard errors sqrt(diag Var_q[η_j])
-//'   - sigma2        (J) updated noise variances
-//'   - Lambda_E      (K × K) expected precision E_q[Λ]
-//'   - IW_upsilon_hat scalar posterior dof for inverse-Wishart on Λ
-//'   - IW_Omega_hat  (K × K) posterior scale matrix for inverse-Wishart on Λ
-//'   - elbo          scalar approximate evidence lower bound
-//'   - label_loglik  scalar contribution of supervised likelihood to ELBO
-//'
+//' @return A list with updated variational parameters and diagnostics:
+//'   \describe{
+//'     \item{nd}{D x K integer matrix of document-topic counts.}
+//'     \item{nw}{K x V integer matrix of topic-word counts.}
+//'     \item{eta}{K x J numeric matrix of regression coefficients.}
+//'     \item{sigma2}{Length-J numeric vector of noise variances.}
+//'     \item{Lambda_E}{K x K numeric matrix, posterior mean of precision matrix Lambda.}
+//'     \item{IW_upsilon_hat}{Numeric scalar, posterior degrees of freedom.}
+//'     \item{IW_Omega_hat}{K x K numeric matrix, posterior scale matrix.}
+//'     \item{elbo}{Numeric scalar, evidence lower bound.}
+//'     \item{label_loglik}{Numeric scalar, supervised log-likelihood term.}
+//'   }
 // [[Rcpp::export]]
 List stm_multi_hier_vi_parallel(
   List mod,

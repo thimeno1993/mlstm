@@ -44,46 +44,47 @@ eLDA_pass_b_fast <- function(mod, count, ndsum, NZ, V, K, alpha, beta) {
     .Call(`_mlstm_eLDA_pass_b_fast`, mod, count, ndsum, NZ, V, K, alpha, beta)
 }
 
-#' Variational inference for multi-output supervised LDA with hierarchical prior
-#' (parallel E-step over documents).
+#' Variational inference for multi-output supervised topic models
+#' with hierarchical prior.
 #'
-#' The model is:
-#'   - Standard LDA for documents: θ_d ~ Dir(α), φ_k ~ Dir(β).
-#'   - Supervised Gaussian layer: y_{d,j} | z̄_d, η_j, σ_j^2 ~ N(z̄_d^T η_j, σ_j^2).
-#'   - Hierarchical prior on regression coefficients:
-#'         η_j ~ N(μ, Λ^{-1}),   Λ ~ IW(upsilon, Ω).
+#' The model includes:
+#'   - LDA structure: theta_d ~ Dir(alpha), phi_k ~ Dir(beta)
+#'   - Gaussian response: y[d,j] ~ N(zbar_d^T eta_j, sigma_j^2)
+#'   - Hierarchical prior:
+#'       eta_j ~ N(mu, Lambda^-1)
+#'       Lambda ~ inverse-Wishart(upsilon, Omega)
 #'
 #' @param mod List with model state:
-#'   - nd  (D × K) document-topic counts
-#'   - nw  (K × V) topic-word counts
-#'   - eta (K × J) regression coefficients η_j
-#'   - sigma2 (J)  per-output noise variance σ_j^2
-#' @param docs IntegerMatrix (NZ × 3) with 0-based triples (doc_id, word_id, count).
-#' @param y    NumericMatrix (D × J) response matrix (NA to skip y_{d,j}).
-#' @param ndsum IntegerVector (D) total token count per document.
-#' @param NZ,V,K,J Model sizes (#nonzeros, vocabulary size, topics, responses).
-#' @param alpha,beta Dirichlet hyperparameters for θ and φ.
-#' @param mu    NumericVector (K) prior mean μ for η_j.
-#' @param upsilon double, degrees of freedom for inverse-Wishart prior on Λ.
-#' @param Omega NumericMatrix (K × K) prior scale matrix for inverse-Wishart.
-#' @param update_sigma Logical: update σ_j^2 (true) or keep fixed (false).
-#' @param tau  Numeric log-cutoff used to prune small φ entries for stability/speed.
-#' @param exact_second_moment Logical: if true, use exact E[z̄ z̄ᵀ]; if false, use X Xᵀ approximation.
-#' @param show_progress Logical: print progress information during E-step.
-#' @param chunk Number of documents processed per parallel chunk.
+#'   - nd  (D x K) document-topic counts
+#'   - nw  (K x V) topic-word counts
+#'   - eta (K x J) regression coefficients
+#'   - sigma2 (J) noise variances
+#' @param docs IntegerMatrix (NZ x 3) with (doc_id, word_id, count).
+#' @param y NumericMatrix (D x J) response matrix.
+#' @param ndsum IntegerVector (D) document token counts.
+#' @param NZ,V,K,J Model dimensions.
+#' @param alpha,beta Dirichlet hyperparameters.
+#' @param mu NumericVector (K) prior mean.
+#' @param upsilon Degrees of freedom for inverse-Wishart.
+#' @param Omega Scale matrix for inverse-Wishart.
+#' @param update_sigma Logical; update sigma2 or not.
+#' @param tau Numeric cutoff for stability.
+#' @param exact_second_moment Logical flag (currently not used).
+#' @param show_progress Logical; print progress.
+#' @param chunk Integer; documents per parallel block.
 #'
-#' @return List with updated variational parameters and diagnostics:
-#'   - nd            (D × K) updated document-topic counts
-#'   - nw            (K × V) updated topic-word counts
-#'   - eta           (K × J) posterior mean E_q[η_j]
-#'   - eta_se        (K × J) approximate standard errors sqrt(diag Var_q[η_j])
-#'   - sigma2        (J) updated noise variances
-#'   - Lambda_E      (K × K) expected precision E_q[Λ]
-#'   - IW_upsilon_hat scalar posterior dof for inverse-Wishart on Λ
-#'   - IW_Omega_hat  (K × K) posterior scale matrix for inverse-Wishart on Λ
-#'   - elbo          scalar approximate evidence lower bound
-#'   - label_loglik  scalar contribution of supervised likelihood to ELBO
-#'
+#' @return A list with updated variational parameters and diagnostics:
+#'   \describe{
+#'     \item{nd}{D x K integer matrix of document-topic counts.}
+#'     \item{nw}{K x V integer matrix of topic-word counts.}
+#'     \item{eta}{K x J numeric matrix of regression coefficients.}
+#'     \item{sigma2}{Length-J numeric vector of noise variances.}
+#'     \item{Lambda_E}{K x K numeric matrix, posterior mean of precision matrix Lambda.}
+#'     \item{IW_upsilon_hat}{Numeric scalar, posterior degrees of freedom.}
+#'     \item{IW_Omega_hat}{K x K numeric matrix, posterior scale matrix.}
+#'     \item{elbo}{Numeric scalar, evidence lower bound.}
+#'     \item{label_loglik}{Numeric scalar, supervised log-likelihood term.}
+#'   }
 stm_multi_hier_vi_parallel <- function(mod, docs, y, ndsum, NZ, V, K, J, alpha, beta, mu, upsilon, Omega, update_sigma = TRUE, tau = 20L, exact_second_moment = FALSE, show_progress = TRUE, chunk = 5000L) {
     .Call(`_mlstm_stm_multi_hier_vi_parallel`, mod, docs, y, ndsum, NZ, V, K, J, alpha, beta, mu, upsilon, Omega, update_sigma, tau, exact_second_moment, show_progress, chunk)
 }
@@ -91,36 +92,37 @@ stm_multi_hier_vi_parallel <- function(mod, docs, y, ndsum, NZ, V, K, J, alpha, 
 #' Variational inference for supervised LDA (single continuous response).
 #'
 #' The model combines unsupervised topic modeling (LDA) with a Gaussian
-#' response on the document-level topic proportions z̄_d:
-#' \deqn{y_d \mid zbar_d, eta \sigma^2 \sim N(zbar_d^T eta\ \sigma^2).}
+#' response on document-level topic proportions.
+#'
+#' \deqn{y_d \sim N(zbar_d^T eta, sigma^2).}
 #'
 #' This function performs one variational inference sweep with a parallel
 #' document-level E-step and simple updates for the regression parameters.
 #'
 #' @param mod A list containing the current model state:
 #'   \describe{
-#'     \item{nd}{D×K matrix of document–topic counts.}
-#'     \item{nw}{K×V matrix of topic–word counts.}
+#'     \item{nd}{D x K matrix of document-topic counts.}
+#'     \item{nw}{K x V matrix of topic-word counts.}
 #'     \item{eta}{Numeric vector of length K; regression coefficients.}
 #'     \item{sigma2}{Scalar noise variance for the Gaussian response.}
 #'   }
-#' @param docs IntegerMatrix of size NZ×3, where each row is a triple
+#' @param docs IntegerMatrix of size NZ x 3, where each row is a triple
 #'   (d, v, c) in 0-based indexing: document index d, word index v,
-#'   and count c = n_{d,v}. Rows with d outside [0, D-1] are ignored.
+#'   and count c = n_dv. Rows with d outside [0, D-1] are ignored.
 #' @param y NumericVector of length D; response y_d for each document.
 #' @param ndsum IntegerVector of length D; total token count per document
-#'   (i.e., ndsum[d] = sum_v n_{d,v}).
+#'   (that is, ndsum[d] = sum_v n_dv).
 #' @param NZ Integer, number of non-zero entries in docs (rows of docs).
 #' @param V Integer, vocabulary size.
 #' @param K Integer, number of topics.
-#' @param alpha Scalar Dirichlet prior parameter for document–topic
-#'   distributions θ_d (symmetric prior with parameter α).
-#' @param beta Scalar Dirichlet prior parameter for topic–word
-#'   distributions β_k (symmetric prior with parameter β).
-#' @param update_sigma Logical; if TRUE, update the noise variance σ²
-#'   from residuals y_d - zbar_d^T eta otherwise keep σ² fixed.
+#' @param alpha Scalar Dirichlet prior parameter for document-topic
+#'   distributions theta_d (symmetric prior with parameter alpha).
+#' @param beta Scalar Dirichlet prior parameter for topic-word
+#'   distributions phi_k (symmetric prior with parameter beta).
+#' @param update_sigma Logical; if TRUE, update the noise variance sigma2
+#'   from residuals y_d - zbar_d^T eta, otherwise keep sigma2 fixed.
 #' @param tau Numeric, log-space cutoff used to prune very small topic
-#'   responsibilities φ_{d,i,k} for numerical stability and efficiency.
+#'   responsibilities phi[d,i,k] for numerical stability and efficiency.
 #' @param show_progress Logical; if TRUE, print simple progress output
 #'   during the E-step over documents.
 #' @param chunk Integer, number of documents to process per parallel
@@ -129,8 +131,8 @@ stm_multi_hier_vi_parallel <- function(mod, docs, y, ndsum, NZ, V, K, J, alpha, 
 #'
 #' @return A list with updated variational parameters and diagnostics:
 #'   \describe{
-#'     \item{nd}{Updated D×K document–topic counts.}
-#'     \item{nw}{Updated K×V topic–word counts.}
+#'     \item{nd}{Updated D x K document-topic counts.}
+#'     \item{nw}{Updated K x V topic-word counts.}
 #'     \item{eta}{Updated K-dimensional regression coefficient vector.}
 #'     \item{sigma2}{Updated scalar noise variance.}
 #'     \item{elbo}{Scalar evidence lower bound (approximate).}

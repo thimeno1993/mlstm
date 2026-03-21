@@ -32,26 +32,26 @@ run_mlstm_vi(
 Each row represents document index \code{d}, word index \code{v}, and
 token count \code{c}.}
 
-\item{Y}{Numeric matrix of size D × J containing J response variables
+\item{Y}{Numeric matrix of size D x J containing J response variables
 for each of the D documents. NA values are allowed and are ignored
 in the initial regression used to seed \code{eta} and \code{sigma2}.}
 
 \item{K}{Integer, number of topics. Required if \code{phi} is \code{NULL};
 ignored if \code{phi} is supplied, in which case \code{K = ncol(phi)}.}
 
-\item{alpha}{Dirichlet prior parameter for document–topic distributions.}
+\item{alpha}{Dirichlet prior parameter for document-topic distributions.}
 
-\item{beta}{Dirichlet prior parameter for topic–word distributions.}
+\item{beta}{Dirichlet prior parameter for topic-word distributions.}
 
 \item{mu}{Numeric vector of length K; prior mean for each \eqn{\eta_j}.}
 
 \item{upsilon}{Scalar degrees of freedom for the inverse-Wishart prior
 on the precision matrix \eqn{\Lambda}.}
 
-\item{Omega}{Numeric K × K positive-definite scale matrix for the
+\item{Omega}{Numeric K x K positive-definite scale matrix for the
 inverse-Wishart prior.}
 
-\item{phi}{Optional numeric matrix of size V × K used only to initialize
+\item{phi}{Optional numeric matrix of size V x K used only to initialize
 topic assignments via \code{init_mod_from_count()}.}
 
 \item{seed}{Optional integer random seed used for initialization.}
@@ -93,18 +93,18 @@ for each response dimension by least squares regression of
 \value{
 A list \code{mod} containing (at least):
   \describe{
-    \item{nd}{D × K document–topic counts.}
-    \item{nw}{K × V topic–word counts.}
+    \item{nd}{D x K document-topic counts.}
+    \item{nw}{K x V topic-word counts.}
     \item{ndsum}{Integer vector of length D; document token counts.}
     \item{nwsum}{Integer vector of length K; topic token counts.}
-    \item{eta}{K × J matrix of regression coefficients.}
+    \item{eta}{K x J matrix of regression coefficients.}
     \item{sigma2}{Length-J vector of noise variances.}
-    \item{Lambda_E}{K × K posterior mean of \eqn{\Lambda} (if returned by C++).}
+    \item{Lambda_E}{K x K posterior mean of \eqn{\Lambda} (if returned by C++).}
     \item{IW_upsilon_hat}{Posterior degrees of freedom (if returned by C++).}
     \item{IW_Omega_hat}{Posterior scale matrix (if returned by C++).}
-    \item{phi}{V × K topic–word posterior mean
+    \item{phi}{V x K topic-word posterior mean
       \eqn{p(w \mid z=k)} computed from \code{nw}.}
-    \item{theta}{D × K document–topic posterior mean
+    \item{theta}{D x K document-topic posterior mean
       \eqn{p(z=k \mid d)} computed from \code{nd}.}
     \item{elbo}{Final ELBO value.}
     \item{label_loglik}{Final label log-likelihood term.}

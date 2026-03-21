@@ -33,11 +33,11 @@ token count \code{c}.}
 \item{K}{Integer, number of topics. Required if \code{phi} is NULL;
 ignored if \code{phi} is provided (then \code{K = ncol(phi)}).}
 
-\item{alpha}{Dirichlet prior parameter for document–topic distributions.}
+\item{alpha}{Dirichlet prior parameter for document-topic distributions.}
 
-\item{beta}{Dirichlet prior parameter for topic–word distributions.}
+\item{beta}{Dirichlet prior parameter for topic-word distributions.}
 
-\item{phi}{Optional V × K topic–word probability matrix used only for
+\item{phi}{Optional V x K topic-word probability matrix used only for
 initializing topic assignments.}
 
 \item{seed}{Optional integer random seed used in the initialization step.}
@@ -64,14 +64,14 @@ noise variance. If NULL, \code{sigma2} is estimated once by least squares.}
 \value{
 A list containing:
   \describe{
-    \item{nd}{D × K document–topic count matrix.}
-    \item{nw}{K × V topic–word count matrix.}
+    \item{nd}{D x K document-topic count matrix.}
+    \item{nw}{K x V topic-word count matrix.}
     \item{ndsum}{Length-D vector of document token counts.}
     \item{nwsum}{Length-K vector of topic token counts.}
     \item{eta}{K-dimensional regression coefficient vector.}
     \item{sigma2}{Final noise variance.}
-    \item{phi}{V × K topic–word posterior mean.}
-    \item{theta}{D × K document–topic posterior mean.}
+    \item{phi}{V x K topic-word posterior mean.}
+    \item{theta}{D x K document-topic posterior mean.}
     \item{elbo}{Final ELBO.}
     \item{label_loglik}{Final supervised term.}
     \item{elbo_trace}{ELBO values per sweep.}
@@ -83,7 +83,7 @@ A list containing:
 \description{
 This function performs supervised topic model (STM) using variational inference.
 It initializes topic assignments from \code{count} (optionally using a
-topic–word prior \code{phi}), estimates regression parameters, and repeatedly
+topic-word prior \code{phi}), estimates regression parameters, and repeatedly
 calls the C++ routine \code{stm_vi_parallel()} until convergence.
 }
 \details{

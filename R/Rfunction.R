@@ -18,14 +18,14 @@ set_threads <- function(num_threads = NULL) {
 
 #' Initialize LDA/STM state from a (d, v, c) sparse count matrix.
 #'
-#' Given a document–term matrix in triplet form (d, v, c) using 0-based indices,
+#' Given a document-term matrix in triplet form (d, v, c) using 0-based indices,
 #' this function initializes the LDA state:
 #' - samples initial topic assignments z,
-#' - constructs document–topic counts nd,
-#' - constructs topic–word counts nw,
+#' - constructs document-topic counts nd,
+#' - constructs topic-word counts nw,
 #' - computes ndsum, nwsum, and normalized topic proportions X.
 #'
-#' If a topic–word probability matrix `phi` is provided (V × K),
+#' If a topic-word probability matrix `phi` is provided (V x K),
 #' initial topics are sampled according to phi[v+1, ].
 #' Otherwise, topics are sampled uniformly from K topics.
 #'
@@ -33,18 +33,18 @@ set_threads <- function(num_threads = NULL) {
 #'   where d and v are 0-based indices.
 #' @param K Integer, number of topics. Required if `phi` is NULL.
 #'   If `phi` is provided, K is inferred from ncol(phi).
-#' @param phi Optional numeric matrix of size V × K specifying per-word topic
+#' @param phi Optional numeric matrix of size V x K specifying per-word topic
 #'   probabilities used only during initialization.
 #' @param seed Optional integer random seed.
 #'
 #' @return A list with components:
 #'   \describe{
 #'     \item{z}{Integer vector (length NZ) of sampled topics, 0-based.}
-#'     \item{nd}{D×K document–topic count matrix.}
-#'     \item{nw}{K×V topic–word count matrix.}
+#'     \item{nd}{DxK document-topic count matrix.}
+#'     \item{nw}{KxV topic-word count matrix.}
 #'     \item{ndsum}{Integer vector (length D) with row sums of nd.}
 #'     \item{nwsum}{Integer vector (length K) with row sums of nw.}
-#'     \item{X}{D×K matrix of normalized topic proportions nd / ndsum.}
+#'     \item{X}{DxK matrix of normalized topic proportions nd / ndsum.}
 #'     \item{D}{Number of documents.}
 #'     \item{V}{Vocabulary size.}
 #'     \item{K}{Number of topics.}
@@ -78,7 +78,7 @@ init_mod_from_count <- function(count, K = NULL, phi = NULL, seed = NULL) {
 
   if (use_phi) {
     if (!is.matrix(phi))
-      stop("`phi` must be a numeric matrix of size V × K.")
+      stop("`phi` must be a numeric matrix of size V x K.")
 
     if (nrow(phi) != V)
       stop("nrow(phi) must equal vocabulary size V.")
@@ -122,8 +122,8 @@ init_mod_from_count <- function(count, K = NULL, phi = NULL, seed = NULL) {
     z = z
   )
 
-  dz <- aggregate(n ~ d + z, data = as.data.frame(dt), FUN  = sum)
-  vz <- aggregate(n ~ v + z, data = as.data.frame(dt), FUN  = sum)
+  dz <- stats::aggregate(n ~ d + z, data = as.data.frame(dt), FUN  = sum)
+  vz <- stats::aggregate(n ~ v + z, data = as.data.frame(dt), FUN  = sum)
 
   nd <- Matrix::sparseMatrix(i = dz$d + 1L, j = dz$z + 1L,
                              x = dz$n, dims = c(D, K))
@@ -150,26 +150,26 @@ init_mod_from_count <- function(count, K = NULL, phi = NULL, seed = NULL) {
 #' Collapsed LDA Gibbs sampling for sparse (d, v, c) triplet data.
 #'
 #' This function performs collapsed Gibbs sampling for the standard LDA model
-#' using a sparse document–term representation:
+#' using a sparse document-term representation:
 #' \enumerate{
 #'   \item initializes the LDA state via \code{init_mod_from_count()},
 #'   \item runs \code{n_iter} iterations of the C++ Gibbs kernel
 #'         \code{eLDA_pass_b_fast()},
-#'   \item returns the final model state, including posterior topic–word
-#'         and document–topic distributions.
+#'   \item returns the final model state, including posterior topic-word
+#'         and document-topic distributions.
 #' }
 #'
-#' @param count Integer matrix of size NZ × 3 with rows (d, v, c) in 0-based
+#' @param count Integer matrix of size NZ x 3 with rows (d, v, c) in 0-based
 #'   indexing: document index \code{d}, word index \code{v}, and count
 #'   \code{c} for that pair.
 #' @param K Integer, number of topics. Required unless \code{phi} is supplied.
 #'   If \code{phi} is provided, \code{K} is inferred from \code{ncol(phi)}.
-#' @param alpha Scalar Dirichlet prior parameter for document–topic
+#' @param alpha Scalar Dirichlet prior parameter for document-topic
 #'   distributions.
-#' @param beta Scalar Dirichlet prior parameter for topic–word
+#' @param beta Scalar Dirichlet prior parameter for topic-word
 #'   distributions.
 #' @param n_iter Integer, number of Gibbs sweeps to run.
-#' @param phi Optional V × K topic–word probability matrix used only for
+#' @param phi Optional V x K topic-word probability matrix used only for
 #'   initializing topic assignments in \code{init_mod_from_count()}.
 #' @param seed Optional integer random seed passed to the initializer.
 #' @param verbose Logical; if \code{TRUE}, print progress messages.
@@ -178,13 +178,13 @@ init_mod_from_count <- function(count, K = NULL, phi = NULL, seed = NULL) {
 #' @return A list \code{mod} containing:
 #'   \describe{
 #'     \item{z}{Integer vector of length NZ; final topic assignments (0-based).}
-#'     \item{nd}{D × K document–topic count matrix.}
-#'     \item{nw}{K × V topic–word count matrix.}
+#'     \item{nd}{D x K document-topic count matrix.}
+#'     \item{nw}{K x V topic-word count matrix.}
 #'     \item{ndsum}{Integer vector of length D; document token counts.}
 #'     \item{nwsum}{Integer vector of length K; topic token counts.}
-#'     \item{phi}{V × K topic–word posterior mean
+#'     \item{phi}{V x K topic-word posterior mean
 #'       \eqn{p(w \mid z=k)} computed from \code{nw}.}
-#'     \item{theta}{D × K document–topic posterior mean
+#'     \item{theta}{D x K document-topic posterior mean
 #'       \eqn{p(z=k \mid d)} computed from \code{nd}.}
 #'     \item{loglik_trace}{Vector of log-likelihoods.}
 #'     \item{D}{Number of documents.}
@@ -262,10 +262,10 @@ run_lda_gibbs <- function(count,
   nwsum <- as.integer(rowSums(mod$nw))
   mod$nwsum <- nwsum
 
-  # topic–word posterior mean: V × K
+  # topic-word posterior mean: V x K
   mod$phi <- t((mod$nw + beta) / (nwsum + V * beta))
 
-  # document–topic posterior mean: D × K
+  # document-topic posterior mean: D x K
   mod$theta <- (mod$nd + alpha) / (mod$ndsum + K * alpha)
 
   mod
@@ -278,7 +278,7 @@ run_lda_gibbs <- function(count,
 #'
 #' This function performs supervised topic model (STM) using variational inference.
 #' It initializes topic assignments from \code{count} (optionally using a
-#' topic–word prior \code{phi}), estimates regression parameters, and repeatedly
+#' topic-word prior \code{phi}), estimates regression parameters, and repeatedly
 #' calls the C++ routine \code{stm_vi_parallel()} until convergence.
 #'
 #' Convergence is assessed based on the relative changes in the evidence lower
@@ -303,9 +303,9 @@ run_lda_gibbs <- function(count,
 #' @param y Numeric vector of length D. Must not contain NA values.
 #' @param K Integer, number of topics. Required if \code{phi} is NULL;
 #'   ignored if \code{phi} is provided (then \code{K = ncol(phi)}).
-#' @param alpha Dirichlet prior parameter for document–topic distributions.
-#' @param beta Dirichlet prior parameter for topic–word distributions.
-#' @param phi Optional V × K topic–word probability matrix used only for
+#' @param alpha Dirichlet prior parameter for document-topic distributions.
+#' @param beta Dirichlet prior parameter for topic-word distributions.
+#' @param phi Optional V x K topic-word probability matrix used only for
 #'   initializing topic assignments.
 #' @param seed Optional integer random seed used in the initialization step.
 #' @param max_iter Maximum number of variational sweeps.
@@ -321,14 +321,14 @@ run_lda_gibbs <- function(count,
 #'
 #' @return A list containing:
 #'   \describe{
-#'     \item{nd}{D × K document–topic count matrix.}
-#'     \item{nw}{K × V topic–word count matrix.}
+#'     \item{nd}{D x K document-topic count matrix.}
+#'     \item{nw}{K x V topic-word count matrix.}
 #'     \item{ndsum}{Length-D vector of document token counts.}
 #'     \item{nwsum}{Length-K vector of topic token counts.}
 #'     \item{eta}{K-dimensional regression coefficient vector.}
 #'     \item{sigma2}{Final noise variance.}
-#'     \item{phi}{V × K topic–word posterior mean.}
-#'     \item{theta}{D × K document–topic posterior mean.}
+#'     \item{phi}{V x K topic-word posterior mean.}
+#'     \item{theta}{D x K document-topic posterior mean.}
 #'     \item{elbo}{Final ELBO.}
 #'     \item{label_loglik}{Final supervised term.}
 #'     \item{elbo_trace}{ELBO values per sweep.}
@@ -551,19 +551,19 @@ n_done <- iter
 #' @param count Integer matrix with 3 columns (d, v, c), using 0-based indices.
 #'   Each row represents document index \code{d}, word index \code{v}, and
 #'   token count \code{c}.
-#' @param Y Numeric matrix of size D × J containing J response variables
+#' @param Y Numeric matrix of size D x J containing J response variables
 #'   for each of the D documents. NA values are allowed and are ignored
 #'   in the initial regression used to seed \code{eta} and \code{sigma2}.
 #' @param K Integer, number of topics. Required if \code{phi} is \code{NULL};
 #'   ignored if \code{phi} is supplied, in which case \code{K = ncol(phi)}.
-#' @param alpha Dirichlet prior parameter for document–topic distributions.
-#' @param beta Dirichlet prior parameter for topic–word distributions.
+#' @param alpha Dirichlet prior parameter for document-topic distributions.
+#' @param beta Dirichlet prior parameter for topic-word distributions.
 #' @param mu Numeric vector of length K; prior mean for each \eqn{\eta_j}.
 #' @param upsilon Scalar degrees of freedom for the inverse-Wishart prior
 #'   on the precision matrix \eqn{\Lambda}.
-#' @param Omega Numeric K × K positive-definite scale matrix for the
+#' @param Omega Numeric K x K positive-definite scale matrix for the
 #'   inverse-Wishart prior.
-#' @param phi Optional numeric matrix of size V × K used only to initialize
+#' @param phi Optional numeric matrix of size V x K used only to initialize
 #'   topic assignments via \code{init_mod_from_count()}.
 #' @param seed Optional integer random seed used for initialization.
 #' @param max_iter Maximum number of variational sweeps.
@@ -593,18 +593,18 @@ n_done <- iter
 #'
 #' @return A list \code{mod} containing (at least):
 #'   \describe{
-#'     \item{nd}{D × K document–topic counts.}
-#'     \item{nw}{K × V topic–word counts.}
+#'     \item{nd}{D x K document-topic counts.}
+#'     \item{nw}{K x V topic-word counts.}
 #'     \item{ndsum}{Integer vector of length D; document token counts.}
 #'     \item{nwsum}{Integer vector of length K; topic token counts.}
-#'     \item{eta}{K × J matrix of regression coefficients.}
+#'     \item{eta}{K x J matrix of regression coefficients.}
 #'     \item{sigma2}{Length-J vector of noise variances.}
-#'     \item{Lambda_E}{K × K posterior mean of \eqn{\Lambda} (if returned by C++).}
+#'     \item{Lambda_E}{K x K posterior mean of \eqn{\Lambda} (if returned by C++).}
 #'     \item{IW_upsilon_hat}{Posterior degrees of freedom (if returned by C++).}
 #'     \item{IW_Omega_hat}{Posterior scale matrix (if returned by C++).}
-#'     \item{phi}{V × K topic–word posterior mean
+#'     \item{phi}{V x K topic-word posterior mean
 #'       \eqn{p(w \mid z=k)} computed from \code{nw}.}
-#'     \item{theta}{D × K document–topic posterior mean
+#'     \item{theta}{D x K document-topic posterior mean
 #'       \eqn{p(z=k \mid d)} computed from \code{nd}.}
 #'     \item{elbo}{Final ELBO value.}
 #'     \item{label_loglik}{Final label log-likelihood term.}
@@ -642,7 +642,7 @@ run_mlstm_vi <- function(count,
 
   # ----- basic checks ------------------------------------------------------
   if (!is.matrix(Y))
-    stop("`Y` must be a numeric matrix with dimensions D × J.")
+    stop("`Y` must be a numeric matrix with dimensions D x J.")
   if (!is.numeric(Y))
     stop("`Y` must be numeric.")
 
@@ -663,7 +663,7 @@ run_mlstm_vi <- function(count,
   ndsum <- init$ndsum
 
   # ----- initial eta and sigma2 via least squares on normalized counts -----
-  X0 <- init$nd / ndsum   # D × K, used only internally
+  X0 <- init$nd / ndsum   # D x K, used only internally
 
   eta_init    <- matrix(0, nrow = K, ncol = J)
   sigma2_vec  <- rep(1.0, J)
@@ -805,10 +805,10 @@ n_done <- iter
   nwsum <- as.integer(rowSums(mod$nw))
   mod$nwsum <- nwsum
 
-  # topic–word posterior mean: V × K
+  # topic-word posterior mean: V x K
   mod$phi <- t((mod$nw + beta) / (nwsum + V * beta))
 
-  # document–topic posterior mean: D × K
+  # document-topic posterior mean: D x K
   mod$theta <- (mod$nd + alpha) / (mod$ndsum + K * alpha)
 
   mod$elbo_trace         <- elbo_trace[seq_len(n_done)]

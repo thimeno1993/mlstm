@@ -13,7 +13,7 @@ where d and v are 0-based indices.}
 \item{K}{Integer, number of topics. Required if `phi` is NULL.
 If `phi` is provided, K is inferred from ncol(phi).}
 
-\item{phi}{Optional numeric matrix of size V × K specifying per-word topic
+\item{phi}{Optional numeric matrix of size V x K specifying per-word topic
 probabilities used only during initialization.}
 
 \item{seed}{Optional integer random seed.}
@@ -22,11 +22,11 @@ probabilities used only during initialization.}
 A list with components:
   \describe{
     \item{z}{Integer vector (length NZ) of sampled topics, 0-based.}
-    \item{nd}{D×K document–topic count matrix.}
-    \item{nw}{K×V topic–word count matrix.}
+    \item{nd}{DxK document-topic count matrix.}
+    \item{nw}{KxV topic-word count matrix.}
     \item{ndsum}{Integer vector (length D) with row sums of nd.}
     \item{nwsum}{Integer vector (length K) with row sums of nw.}
-    \item{X}{D×K matrix of normalized topic proportions nd / ndsum.}
+    \item{X}{DxK matrix of normalized topic proportions nd / ndsum.}
     \item{D}{Number of documents.}
     \item{V}{Vocabulary size.}
     \item{K}{Number of topics.}
@@ -34,15 +34,15 @@ A list with components:
   }
 }
 \description{
-Given a document–term matrix in triplet form (d, v, c) using 0-based indices,
+Given a document-term matrix in triplet form (d, v, c) using 0-based indices,
 this function initializes the LDA state:
 - samples initial topic assignments z,
-- constructs document–topic counts nd,
-- constructs topic–word counts nw,
+- constructs document-topic counts nd,
+- constructs topic-word counts nw,
 - computes ndsum, nwsum, and normalized topic proportions X.
 }
 \details{
-If a topic–word probability matrix `phi` is provided (V × K),
+If a topic-word probability matrix `phi` is provided (V x K),
 initial topics are sampled according to phi[v+1, ].
 Otherwise, topics are sampled uniformly from K topics.
 }
