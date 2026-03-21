@@ -6,7 +6,7 @@ Authors@R:
     person("Tomoya", "Himeno", email = "you@example.com", role = c("aut", "cre"))
 Description: LDA, supervised topic model, and multi-level supervised topic model
     implemented in C++ with Rcpp, RcppArmadillo, and RcppParallel.
-License: GPL-3
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: 
@@ -28,5 +28,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/thimeno1993/mlstm
+URL: https://thimeno1993.github.io/mlstm
 BugReports: https://github.com/thimeno1993/mlstm/issues
+VignetteBuilder: knitr
