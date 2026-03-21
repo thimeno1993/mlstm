@@ -41,7 +41,7 @@ run_mlstm_vi(
 
 - Y:
 
-  Numeric matrix of size D × J containing J response variables for each
+  Numeric matrix of size D x J containing J response variables for each
   of the D documents. NA values are allowed and are ignored in the
   initial regression used to seed `eta` and `sigma2`.
 
@@ -52,11 +52,11 @@ run_mlstm_vi(
 
 - alpha:
 
-  Dirichlet prior parameter for document–topic distributions.
+  Dirichlet prior parameter for document-topic distributions.
 
 - beta:
 
-  Dirichlet prior parameter for topic–word distributions.
+  Dirichlet prior parameter for topic-word distributions.
 
 - mu:
 
@@ -69,12 +69,12 @@ run_mlstm_vi(
 
 - Omega:
 
-  Numeric K × K positive-definite scale matrix for the inverse-Wishart
+  Numeric K x K positive-definite scale matrix for the inverse-Wishart
   prior.
 
 - phi:
 
-  Optional numeric matrix of size V × K used only to initialize topic
+  Optional numeric matrix of size V x K used only to initialize topic
   assignments via
   [`init_mod_from_count()`](https://thimeno1993.github.io/mlstm/reference/init_mod_from_count.md).
 
@@ -141,11 +141,11 @@ A list `mod` containing (at least):
 
 - nd:
 
-  D × K document–topic counts.
+  D x K document-topic counts.
 
 - nw:
 
-  K × V topic–word counts.
+  K x V topic-word counts.
 
 - ndsum:
 
@@ -157,7 +157,7 @@ A list `mod` containing (at least):
 
 - eta:
 
-  K × J matrix of regression coefficients.
+  K x J matrix of regression coefficients.
 
 - sigma2:
 
@@ -165,7 +165,7 @@ A list `mod` containing (at least):
 
 - Lambda_E:
 
-  K × K posterior mean of \\\Lambda\\ (if returned by C++).
+  K x K posterior mean of \\\Lambda\\ (if returned by C++).
 
 - IW_upsilon_hat:
 
@@ -177,11 +177,11 @@ A list `mod` containing (at least):
 
 - phi:
 
-  V × K topic–word posterior mean \\p(w \mid z=k)\\ computed from `nw`.
+  V x K topic-word posterior mean \\p(w \mid z=k)\\ computed from `nw`.
 
 - theta:
 
-  D × K document–topic posterior mean \\p(z=k \mid d)\\ computed from
+  D x K document-topic posterior mean \\p(z=k \mid d)\\ computed from
   `nd`.
 
 - elbo:

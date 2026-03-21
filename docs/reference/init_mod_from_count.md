@@ -1,9 +1,9 @@
 # Initialize LDA/STM state from a (d, v, c) sparse count matrix.
 
-Given a document–term matrix in triplet form (d, v, c) using 0-based
+Given a document-term matrix in triplet form (d, v, c) using 0-based
 indices, this function initializes the LDA state: - samples initial
-topic assignments z, - constructs document–topic counts nd, - constructs
-topic–word counts nw, - computes ndsum, nwsum, and normalized topic
+topic assignments z, - constructs document-topic counts nd, - constructs
+topic-word counts nw, - computes ndsum, nwsum, and normalized topic
 proportions X.
 
 ## Usage
@@ -26,7 +26,7 @@ init_mod_from_count(count, K = NULL, phi = NULL, seed = NULL)
 
 - phi:
 
-  Optional numeric matrix of size V × K specifying per-word topic
+  Optional numeric matrix of size V x K specifying per-word topic
   probabilities used only during initialization.
 
 - seed:
@@ -43,11 +43,11 @@ A list with components:
 
 - nd:
 
-  D×K document–topic count matrix.
+  DxK document-topic count matrix.
 
 - nw:
 
-  K×V topic–word count matrix.
+  KxV topic-word count matrix.
 
 - ndsum:
 
@@ -59,7 +59,7 @@ A list with components:
 
 - X:
 
-  D×K matrix of normalized topic proportions nd / ndsum.
+  DxK matrix of normalized topic proportions nd / ndsum.
 
 - D:
 
@@ -79,6 +79,6 @@ A list with components:
 
 ## Details
 
-If a topic–word probability matrix \`phi\` is provided (V × K), initial
+If a topic-word probability matrix \`phi\` is provided (V x K), initial
 topics are sampled according to phi\[v+1, \]. Otherwise, topics are
 sampled uniformly from K topics.

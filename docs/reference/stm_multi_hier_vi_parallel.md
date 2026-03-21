@@ -1,9 +1,9 @@
-# Variational inference for multi-output supervised LDA with hierarchical prior (parallel E-step over documents).
+# Variational inference for multi-output supervised topic models with hierarchical prior.
 
-The model is: - Standard LDA for documents: θ_d ~ Dir(α), φ_k ~
-Dir(β). - Supervised Gaussian layer: y_d,j \| z̄\_d, η_j, σ_j^2 ~
-N(z̄\_d^T η_j, σ_j^2). - Hierarchical prior on regression coefficients:
-η_j ~ N(μ, Λ^-1), Λ ~ IW(upsilon, Ω).
+The model includes: - LDA structure: theta_d ~ Dir(alpha), phi_k ~
+Dir(beta) - Gaussian response: y\[d,j\] ~ N(zbar_d^T eta_j, sigma_j^2) -
+Hierarchical prior: eta_j ~ N(mu, Lambda^-1) Lambda ~
+inverse-Wishart(upsilon, Omega)
 
 ## Usage
 
@@ -34,71 +34,98 @@ stm_multi_hier_vi_parallel(
 
 - mod:
 
-  List with model state: - nd (D × K) document-topic counts - nw (K × V)
-  topic-word counts - eta (K × J) regression coefficients η_j -
-  sigma2 (J) per-output noise variance σ_j^2
+  List with model state: - nd (D x K) document-topic counts - nw (K x V)
+  topic-word counts - eta (K x J) regression coefficients - sigma2 (J)
+  noise variances
 
 - docs:
 
-  IntegerMatrix (NZ × 3) with 0-based triples (doc_id, word_id, count).
+  IntegerMatrix (NZ x 3) with (doc_id, word_id, count).
 
 - y:
 
-  NumericMatrix (D × J) response matrix (NA to skip y_d,j).
+  NumericMatrix (D x J) response matrix.
 
 - ndsum:
 
-  IntegerVector (D) total token count per document.
+  IntegerVector (D) document token counts.
 
 - NZ, V, K, J:
 
-  Model sizes (#nonzeros, vocabulary size, topics, responses).
+  Model dimensions.
 
 - alpha, beta:
 
-  Dirichlet hyperparameters for θ and φ.
+  Dirichlet hyperparameters.
 
 - mu:
 
-  NumericVector (K) prior mean μ for η_j.
+  NumericVector (K) prior mean.
 
 - upsilon:
 
-  double, degrees of freedom for inverse-Wishart prior on Λ.
+  Degrees of freedom for inverse-Wishart.
 
 - Omega:
 
-  NumericMatrix (K × K) prior scale matrix for inverse-Wishart.
+  Scale matrix for inverse-Wishart.
 
 - update_sigma:
 
-  Logical: update σ_j^2 (true) or keep fixed (false).
+  Logical; update sigma2 or not.
 
 - tau:
 
-  Numeric log-cutoff used to prune small φ entries for stability/speed.
+  Numeric cutoff for stability.
 
 - exact_second_moment:
 
-  Logical: if true, use exact E\[z̄ z̄ᵀ\]; if false, use X Xᵀ
-  approximation.
+  Logical flag (currently not used).
 
 - show_progress:
 
-  Logical: print progress information during E-step.
+  Logical; print progress.
 
 - chunk:
 
-  Number of documents processed per parallel chunk.
+  Integer; documents per parallel block.
 
 ## Value
 
-List with updated variational parameters and diagnostics: - nd (D × K)
-updated document-topic counts - nw (K × V) updated topic-word counts -
-eta (K × J) posterior mean E_q\[η_j\] - eta_se (K × J) approximate
-standard errors sqrt(diag Var_q\[η_j\]) - sigma2 (J) updated noise
-variances - Lambda_E (K × K) expected precision E_q\[Λ\] -
-IW_upsilon_hat scalar posterior dof for inverse-Wishart on Λ -
-IW_Omega_hat (K × K) posterior scale matrix for inverse-Wishart on Λ -
-elbo scalar approximate evidence lower bound - label_loglik scalar
-contribution of supervised likelihood to ELBO
+A list with updated variational parameters and diagnostics:
+
+- nd:
+
+  D x K integer matrix of document-topic counts.
+
+- nw:
+
+  K x V integer matrix of topic-word counts.
+
+- eta:
+
+  K x J numeric matrix of regression coefficients.
+
+- sigma2:
+
+  Length-J numeric vector of noise variances.
+
+- Lambda_E:
+
+  K x K numeric matrix, posterior mean of precision matrix Lambda.
+
+- IW_upsilon_hat:
+
+  Numeric scalar, posterior degrees of freedom.
+
+- IW_Omega_hat:
+
+  K x K numeric matrix, posterior scale matrix.
+
+- elbo:
+
+  Numeric scalar, evidence lower bound.
+
+- label_loglik:
+
+  Numeric scalar, supervised log-likelihood term.

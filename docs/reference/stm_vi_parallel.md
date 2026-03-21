@@ -1,8 +1,7 @@
 # Variational inference for supervised LDA (single continuous response).
 
 The model combines unsupervised topic modeling (LDA) with a Gaussian
-response on the document-level topic proportions z̄\_d: \$\$y_d \mid
-zbar_d, eta \sigma^2 \sim N(zbar_d^T eta\\ \sigma^2).\$\$
+response on document-level topic proportions.
 
 ## Usage
 
@@ -32,11 +31,11 @@ stm_vi_parallel(
 
   nd
 
-  :   D×K matrix of document–topic counts.
+  :   D x K matrix of document-topic counts.
 
   nw
 
-  :   K×V matrix of topic–word counts.
+  :   K x V matrix of topic-word counts.
 
   eta
 
@@ -48,8 +47,8 @@ stm_vi_parallel(
 
 - docs:
 
-  IntegerMatrix of size NZ×3, where each row is a triple (d, v, c) in
-  0-based indexing: document index d, word index v, and count c = n_d,v.
+  IntegerMatrix of size NZ x 3, where each row is a triple (d, v, c) in
+  0-based indexing: document index d, word index v, and count c = n_dv.
   Rows with d outside \[0, D-1\] are ignored.
 
 - y:
@@ -58,8 +57,8 @@ stm_vi_parallel(
 
 - ndsum:
 
-  IntegerVector of length D; total token count per document (i.e.,
-  ndsum\[d\] = sum_v n_d,v).
+  IntegerVector of length D; total token count per document (that is,
+  ndsum\[d\] = sum_v n_dv).
 
 - NZ:
 
@@ -75,23 +74,23 @@ stm_vi_parallel(
 
 - alpha:
 
-  Scalar Dirichlet prior parameter for document–topic distributions θ_d
-  (symmetric prior with parameter α).
+  Scalar Dirichlet prior parameter for document-topic distributions
+  theta_d (symmetric prior with parameter alpha).
 
 - beta:
 
-  Scalar Dirichlet prior parameter for topic–word distributions β_k
-  (symmetric prior with parameter β).
+  Scalar Dirichlet prior parameter for topic-word distributions phi_k
+  (symmetric prior with parameter beta).
 
 - update_sigma:
 
-  Logical; if TRUE, update the noise variance σ² from residuals y_d -
-  zbar_d^T eta otherwise keep σ² fixed.
+  Logical; if TRUE, update the noise variance sigma2 from residuals
+  y_d - zbar_d^T eta, otherwise keep sigma2 fixed.
 
 - tau:
 
   Numeric, log-space cutoff used to prune very small topic
-  responsibilities φ_d,i,k for numerical stability and efficiency.
+  responsibilities phi\[d,i,k\] for numerical stability and efficiency.
 
 - show_progress:
 
@@ -109,11 +108,11 @@ A list with updated variational parameters and diagnostics:
 
 - nd:
 
-  Updated D×K document–topic counts.
+  Updated D x K document-topic counts.
 
 - nw:
 
-  Updated K×V topic–word counts.
+  Updated K x V topic-word counts.
 
 - eta:
 
@@ -132,6 +131,8 @@ A list with updated variational parameters and diagnostics:
   Gaussian response log-likelihood component.
 
 ## Details
+
+\$\$y_d \sim N(zbar_d^T eta, sigma^2).\$\$
 
 This function performs one variational inference sweep with a parallel
 document-level E-step and simple updates for the regression parameters.

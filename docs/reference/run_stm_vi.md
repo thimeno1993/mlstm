@@ -2,7 +2,7 @@
 
 This function performs supervised topic model (STM) using variational
 inference. It initializes topic assignments from `count` (optionally
-using a topic–word prior `phi`), estimates regression parameters, and
+using a topic-word prior `phi`), estimates regression parameters, and
 repeatedly calls the C++ routine
 [`stm_vi_parallel()`](https://thimeno1993.github.io/mlstm/reference/stm_vi_parallel.md)
 until convergence.
@@ -48,15 +48,15 @@ run_stm_vi(
 
 - alpha:
 
-  Dirichlet prior parameter for document–topic distributions.
+  Dirichlet prior parameter for document-topic distributions.
 
 - beta:
 
-  Dirichlet prior parameter for topic–word distributions.
+  Dirichlet prior parameter for topic-word distributions.
 
 - phi:
 
-  Optional V × K topic–word probability matrix used only for
+  Optional V x K topic-word probability matrix used only for
   initializing topic assignments.
 
 - seed:
@@ -107,11 +107,11 @@ A list containing:
 
 - nd:
 
-  D × K document–topic count matrix.
+  D x K document-topic count matrix.
 
 - nw:
 
-  K × V topic–word count matrix.
+  K x V topic-word count matrix.
 
 - ndsum:
 
@@ -131,11 +131,11 @@ A list containing:
 
 - phi:
 
-  V × K topic–word posterior mean.
+  V x K topic-word posterior mean.
 
 - theta:
 
-  D × K document–topic posterior mean.
+  D x K document-topic posterior mean.
 
 - elbo:
 

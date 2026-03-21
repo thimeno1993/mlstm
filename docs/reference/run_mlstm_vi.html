@@ -83,7 +83,7 @@ token count <code>c</code>.</p></dd>
 
 
 <dt id="arg-y">Y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>Numeric matrix of size D × J containing J response variables
+<dd><p>Numeric matrix of size D x J containing J response variables
 for each of the D documents. NA values are allowed and are ignored
 in the initial regression used to seed <code>eta</code> and <code>sigma2</code>.</p></dd>
 
@@ -94,11 +94,11 @@ ignored if <code>phi</code> is supplied, in which case <code>K = ncol(phi)</code
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
-<dd><p>Dirichlet prior parameter for document–topic distributions.</p></dd>
+<dd><p>Dirichlet prior parameter for document-topic distributions.</p></dd>
 
 
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
-<dd><p>Dirichlet prior parameter for topic–word distributions.</p></dd>
+<dd><p>Dirichlet prior parameter for topic-word distributions.</p></dd>
 
 
 <dt id="arg-mu">mu<a class="anchor" aria-label="anchor" href="#arg-mu"></a></dt>
@@ -111,12 +111,12 @@ on the precision matrix \(\Lambda\).</p></dd>
 
 
 <dt id="arg-omega">Omega<a class="anchor" aria-label="anchor" href="#arg-omega"></a></dt>
-<dd><p>Numeric K × K positive-definite scale matrix for the
+<dd><p>Numeric K x K positive-definite scale matrix for the
 inverse-Wishart prior.</p></dd>
 
 
 <dt id="arg-phi">phi<a class="anchor" aria-label="anchor" href="#arg-phi"></a></dt>
-<dd><p>Optional numeric matrix of size V × K used only to initialize
+<dd><p>Optional numeric matrix of size V x K used only to initialize
 topic assignments via <code><a href="init_mod_from_count.html">init_mod_from_count()</a></code>.</p></dd>
 
 
@@ -181,10 +181,10 @@ for each response dimension by least squares regression of
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list <code>mod</code> containing (at least):</p><dl><dt>nd</dt>
-<dd><p>D × K document–topic counts.</p></dd>
+<dd><p>D x K document-topic counts.</p></dd>
 
     <dt>nw</dt>
-<dd><p>K × V topic–word counts.</p></dd>
+<dd><p>K x V topic-word counts.</p></dd>
 
     <dt>ndsum</dt>
 <dd><p>Integer vector of length D; document token counts.</p></dd>
@@ -193,13 +193,13 @@ for each response dimension by least squares regression of
 <dd><p>Integer vector of length K; topic token counts.</p></dd>
 
     <dt>eta</dt>
-<dd><p>K × J matrix of regression coefficients.</p></dd>
+<dd><p>K x J matrix of regression coefficients.</p></dd>
 
     <dt>sigma2</dt>
 <dd><p>Length-J vector of noise variances.</p></dd>
 
     <dt>Lambda_E</dt>
-<dd><p>K × K posterior mean of \(\Lambda\) (if returned by C++).</p></dd>
+<dd><p>K x K posterior mean of \(\Lambda\) (if returned by C++).</p></dd>
 
     <dt>IW_upsilon_hat</dt>
 <dd><p>Posterior degrees of freedom (if returned by C++).</p></dd>
@@ -208,11 +208,11 @@ for each response dimension by least squares regression of
 <dd><p>Posterior scale matrix (if returned by C++).</p></dd>
 
     <dt>phi</dt>
-<dd><p>V × K topic–word posterior mean
+<dd><p>V x K topic-word posterior mean
       \(p(w \mid z=k)\) computed from <code>nw</code>.</p></dd>
 
     <dt>theta</dt>
-<dd><p>D × K document–topic posterior mean
+<dd><p>D x K document-topic posterior mean
       \(p(z=k \mid d)\) computed from <code>nd</code>.</p></dd>
 
     <dt>elbo</dt>

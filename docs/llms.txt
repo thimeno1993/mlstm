@@ -223,8 +223,8 @@ devtools::check()
 - [`set_threads()`](https://thimeno1993.github.io/mlstm/reference/set_threads.md)
   : Set threading options for STM/MLSTM computations
 - [`stm_multi_hier_vi_parallel()`](https://thimeno1993.github.io/mlstm/reference/stm_multi_hier_vi_parallel.md)
-  : Variational inference for multi-output supervised LDA with
-  hierarchical prior (parallel E-step over documents).
+  : Variational inference for multi-output supervised topic models with
+  hierarchical prior.
 - [`stm_vi_parallel()`](https://thimeno1993.github.io/mlstm/reference/stm_vi_parallel.md)
   : Variational inference for supervised LDA (single continuous
   response).
