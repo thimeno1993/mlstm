@@ -92,7 +92,7 @@ stm_multi_hier_vi_parallel <- function(mod, docs, y, ndsum, NZ, V, K, J, alpha, 
 #'
 #' The model combines unsupervised topic modeling (LDA) with a Gaussian
 #' response on the document-level topic proportions z̄_d:
-#' \deqn{y_d \mid \bar{z}_d, \eta, \sigma^2 \sim N(\bar{z}_d^\top \eta,\ \sigma^2).}
+#' \deqn{y_d \mid zbar_d, eta \sigma^2 \sim N(zbar_d^T eta\ \sigma^2).}
 #'
 #' This function performs one variational inference sweep with a parallel
 #' document-level E-step and simple updates for the regression parameters.
@@ -118,7 +118,7 @@ stm_multi_hier_vi_parallel <- function(mod, docs, y, ndsum, NZ, V, K, J, alpha, 
 #' @param beta Scalar Dirichlet prior parameter for topic–word
 #'   distributions β_k (symmetric prior with parameter β).
 #' @param update_sigma Logical; if TRUE, update the noise variance σ²
-#'   from residuals y_d - \bar{z}_d^\top \eta, otherwise keep σ² fixed.
+#'   from residuals y_d - zbar_d^T eta otherwise keep σ² fixed.
 #' @param tau Numeric, log-space cutoff used to prune very small topic
 #'   responsibilities φ_{d,i,k} for numerical stability and efficiency.
 #' @param show_progress Logical; if TRUE, print simple progress output

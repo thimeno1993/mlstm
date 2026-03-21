@@ -51,7 +51,7 @@ distributions θ_d (symmetric prior with parameter α).}
 distributions β_k (symmetric prior with parameter β).}
 
 \item{update_sigma}{Logical; if TRUE, update the noise variance σ²
-from residuals y_d - \bar{z}_d^\top \eta, otherwise keep σ² fixed.}
+from residuals y_d - zbar_d^T eta otherwise keep σ² fixed.}
 
 \item{tau}{Numeric, log-space cutoff used to prune very small topic
 responsibilities φ_{d,i,k} for numerical stability and efficiency.}
@@ -77,7 +77,7 @@ A list with updated variational parameters and diagnostics:
 \description{
 The model combines unsupervised topic modeling (LDA) with a Gaussian
 response on the document-level topic proportions z̄_d:
-\deqn{y_d \mid \bar{z}_d, \eta, \sigma^2 \sim N(\bar{z}_d^\top \eta,\ \sigma^2).}
+\deqn{y_d \mid zbar_d, eta \sigma^2 \sim N(zbar_d^T eta\ \sigma^2).}
 }
 \details{
 This function performs one variational inference sweep with a parallel

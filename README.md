@@ -31,6 +31,7 @@ remotes::install_github("thimeno1993/mlstm")
 ### Simulated corpus
 
 ``` r
+library(mlstm)
 set.seed(123)
 
 D <- 50
@@ -57,8 +58,6 @@ Y <- cbind(
 ## LDA
 
 ``` r
-library(mlstm)
-
 mod_lda <- run_lda_gibbs(
   count = count,
   K     = K,
