@@ -1,0 +1,30 @@
+Package: mlstm
+Type: Package
+Title: Multi-level Supervised Topic Model
+Version: 0.1.0
+Authors@R: 
+    person("Tomoya", "Himeno", email = "you@example.com", role = c("aut", "cre"))
+Description: LDA, supervised topic model, and multi-level supervised topic model
+    implemented in C++ with Rcpp, RcppArmadillo, and RcppParallel.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 4.0.0)
+Imports:
+    Rcpp,
+    Matrix,
+    data.table,
+    RcppParallel
+LinkingTo:
+    Rcpp,
+    RcppArmadillo,
+    RcppParallel,
+    BH
+SystemRequirements: C++17
+RoxygenNote: 7.3.3
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
