@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   mlstm-intro: mlstm-intro.html
-last_built: 2026-03-21T14:52Z
+last_built: 2026-03-21T15:27Z
 urls:
   reference: https://thimeno1993.github.io/mlstm/reference
   article: https://thimeno1993.github.io/mlstm/articles

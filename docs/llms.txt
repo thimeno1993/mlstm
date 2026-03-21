@@ -1,19 +1,33 @@
 # mlstm
 
-**Fast multi-output supervised topic models in R (Rcpp-powered)**
+**mlstm: Multilevel Supervised Topic Models with Multiple Outcomes in
+R**
 
 ------------------------------------------------------------------------
 
 ## Overview
 
-`mlstm` provides efficient implementations of:
+`mlstm` implements Multilevel Supervised Topic Models (MLSTM), a
+probabilistic framework for analyzing text data with multiple associated
+outcome variables.
 
-- Latent Dirichlet Allocation (LDA)
-- Supervised Topic Models (STM)
-- Multi-output supervised topic models (MLSTM)
+Unlike standard supervised topic models that assume a single response
+per document, MLSTM allows multiple outcomes and introduces a
+hierarchical regression structure to share information across them.
 
-All core algorithms are implemented in C++ via `Rcpp`, enabling fast
-estimation even for moderately large datasets.
+The package provides efficient variational inference algorithms
+implemented in C++ via Rcpp, enabling scalable estimation for large text
+corpora.
+
+------------------------------------------------------------------------
+
+## Key Features
+
+- Multi-output supervised topic modeling
+- Hierarchical regression structure across outcomes
+- Variational Bayesian inference (fast and scalable)
+- Supports missing outcome values
+- C++ backend via RcppParallel for performance
 
 ------------------------------------------------------------------------
 
@@ -146,10 +160,20 @@ Each row of `count` represents one non-zero document-term entry.
 
 ------------------------------------------------------------------------
 
+## Documentation
+
+- pkgdown site: <https://thimeno1993.github.io/mlstm>
+
+------------------------------------------------------------------------
+
 ## References
 
-- Blei, Ng, Jordan (2003)
-- McAuliffe & Blei (2008)
+- Himeno T, Yokouchi D (2023). “A Multi-Label Supervised Topic Model for
+  Financial Market Analysis Using News (in Japanese).” JAFEE Journal,
+  21, 1–28.
+- Himeno, T. and Yokouchi, D. (2026). “mlstm: Multilevel Supervised
+  Topic Models with Multiple Outcomes in R.”” (Under submission to
+  Journal of Statistical Software)
 
 ------------------------------------------------------------------------
 

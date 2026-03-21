@@ -168,7 +168,7 @@ Each row of `count` represents one non-zero document-term entry.
 
 ## References
 -   Himeno T, Yokouchi D (2023). “A Multi-Label Supervised Topic Model for Financial Market Analysis Using News (in Japanese).” JAFEE Journal, 21, 1–28.
--   Himeno, T. and Yokouchi, D. (2026). mlstm: Multilevel Supervised Topic Models with Multiple Outcomes in R. (Under submission to Journal of Statistical Software)
+-   Himeno, T. and Yokouchi, D. (2026). "mlstm: Multilevel Supervised Topic Models with Multiple Outcomes in R."" (Under submission to Journal of Statistical Software)
 
 ------------------------------------------------------------------------
 

@@ -54,18 +54,26 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="mlstm">mlstm<a class="anchor" aria-label="anchor" href="#mlstm"></a>
 </h1></div>
-<p><strong>Fast multi-output supervised topic models in R (Rcpp-powered)</strong></p>
+<p><strong>mlstm: Multilevel Supervised Topic Models with Multiple Outcomes in R</strong></p>
 <hr>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><code>mlstm</code> provides efficient implementations of:</p>
+<p><code>mlstm</code> implements Multilevel Supervised Topic Models (MLSTM), a probabilistic framework for analyzing text data with multiple associated outcome variables.</p>
+<p>Unlike standard supervised topic models that assume a single response per document, MLSTM allows multiple outcomes and introduces a hierarchical regression structure to share information across them.</p>
+<p>The package provides efficient variational inference algorithms implemented in C++ via Rcpp, enabling scalable estimation for large text corpora.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
+</h2>
 <ul>
-<li>Latent Dirichlet Allocation (LDA)</li>
-<li>Supervised Topic Models (STM)</li>
-<li>Multi-output supervised topic models (MLSTM)</li>
+<li>Multi-output supervised topic modeling</li>
+<li>Hierarchical regression structure across outcomes</li>
+<li>Variational Bayesian inference (fast and scalable)</li>
+<li>Supports missing outcome values</li>
+<li>C++ backend via RcppParallel for performance</li>
 </ul>
-<p>All core algorithms are implemented in C++ via <code>Rcpp</code>, enabling fast estimation even for moderately large datasets.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -213,11 +221,20 @@
 <hr>
 </div>
 <div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<ul>
+<li>pkgdown site: <a href="https://thimeno1993.github.io/mlstm" class="uri">https://thimeno1993.github.io/mlstm</a>
+</li>
+</ul>
+<hr>
+</div>
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
-<li>Blei, Ng, Jordan (2003)</li>
-<li>McAuliffe &amp; Blei (2008)</li>
+<li>Himeno T, Yokouchi D (2023). “A Multi-Label Supervised Topic Model for Financial Market Analysis Using News (in Japanese).” JAFEE Journal, 21, 1–28.</li>
+<li>Himeno, T. and Yokouchi, D. (2026). “mlstm: Multilevel Supervised Topic Models with Multiple Outcomes in R.”” (Under submission to Journal of Statistical Software)</li>
 </ul>
 <hr>
 </div>
