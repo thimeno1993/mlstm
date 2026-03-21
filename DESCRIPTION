@@ -1,6 +1,6 @@
 Package: mlstm
 Type: Package
-Title: mlstm: Multilevel Supervised Topic Models with Multiple Outcomes in R
+Title: Multilevel Supervised Topic Models with Multiple Outcomes in R
 Version: 0.1.0
 Authors@R: 
     person("Tomoya", "Himeno", email = "bd24f002@g.hit-u.ac.jp", role = c("aut", "cre"))
@@ -32,6 +32,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://thimeno1993.github.io/mlstm
+URL: https://thimeno1993.github.io/mlstm/
 BugReports: https://github.com/thimeno1993/mlstm/issues
 VignetteBuilder: knitr
