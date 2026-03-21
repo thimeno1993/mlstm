@@ -1,0 +1,166 @@
+---
+title: "Introduction to mlstm"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to mlstm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+set.seed(123)
+```
+
+# Overview
+
+`mlstm` provides tools for fitting:
+
+- Latent Dirichlet Allocation (LDA)
+- Supervised Topic Models (STM)
+- Multi-output supervised topic models (MLSTM)
+
+This vignette shows a minimal end-to-end workflow using simulated data.
+
+# Simulated corpus
+
+We generate a small document-term representation in triplet form.  
+Each row of `count` is `(d, v, c)` where:
+
+- `d`: document index (0-based)
+- `v`: vocabulary index (0-based)
+- `c`: token count
+
+```{r}
+library(mlstm)
+
+D <- 50
+V <- 200
+K <- 5
+
+NZ_per_doc <- 20
+NZ <- D * NZ_per_doc
+
+count <- cbind(
+  d = as.integer(rep(0:(D - 1), each = NZ_per_doc)),
+  v = as.integer(sample.int(V, NZ, replace = TRUE) - 1L),
+  c = as.integer(rpois(NZ, 3) + 1L)
+)
+
+Y <- cbind(
+  y1 = rnorm(D),
+  y2 = rnorm(D)
+)
+
+dim(count)
+head(count)
+dim(Y)
+```
+
+# LDA
+
+We first fit an unsupervised LDA model.
+
+```{r}
+mod_lda <- run_lda_gibbs(
+  count = count,
+  K = K,
+  alpha = 0.1,
+  beta = 0.01,
+  n_iter = 20,
+  verbose = FALSE
+)
+
+str(mod_lda$theta)
+str(mod_lda$phi)
+```
+
+The output typically includes:
+
+- `theta`: document-topic proportions
+- `phi`: topic-word distributions
+- additional trace information depending on the implementation
+
+# STM
+
+Next, we fit a supervised topic model using a single response variable.
+
+```{r}
+y <- Y[, 1]
+
+set_threads(2)
+
+mod_stm <- run_stm_vi(
+  count = count,
+  y = y,
+  K = K,
+  alpha = 0.1,
+  beta = 0.01,
+  max_iter = 50,
+  min_iter = 10,
+  verbose = FALSE
+)
+
+y_hat <- ((mod_stm$nd / mod_stm$ndsum) %*% mod_stm$eta)[, 1]
+cor(y, y_hat)
+```
+
+If available in the returned object, you can also inspect optimization traces such as ELBO:
+
+```{r, eval = FALSE}
+plot(mod_stm$elbo_trace, type = "l")
+plot(mod_stm$label_loglik_trace, type = "l")
+```
+
+# MLSTM
+
+Finally, we fit a multi-output supervised topic model.
+
+```{r}
+mu <- rep(0, K)
+upsilon <- K + 2
+Omega <- diag(K)
+
+mod_mlstm <- run_mlstm_vi(
+  count = count,
+  Y = Y,
+  K = K,
+  alpha = 0.1,
+  beta = 0.01,
+  mu = mu,
+  upsilon = upsilon,
+  Omega = Omega,
+  max_iter = 50,
+  min_iter = 10,
+  verbose = FALSE
+)
+
+Y_hat <- ((mod_mlstm$nd / mod_mlstm$ndsum) %*% mod_mlstm$eta)
+cor(Y, Y_hat)
+```
+
+As with STM, you can inspect fitting diagnostics if stored in the returned object.
+
+```{r, eval = FALSE}
+plot(mod_mlstm$elbo_trace, type = "l")
+plot(mod_mlstm$label_loglik_trace, type = "l")
+```
+
+# Notes
+
+For package checks and documentation builds, it is better to keep examples and vignettes light:
+
+- use small synthetic datasets
+- keep the number of iterations modest
+- avoid verbose console output
+
+This makes the vignette suitable for local builds, GitHub, and CRAN workflows.
+
+# Session info
+
+```{r}
+sessionInfo()
+```
