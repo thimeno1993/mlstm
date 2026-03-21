@@ -7,3 +7,5 @@
 ^docs$
 ^pkgdown$
 ^pipeline_deploy\.R$
+^CRAN-SUBMISSION$
+^cran-comments\.md$

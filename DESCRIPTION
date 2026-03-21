@@ -1,7 +1,7 @@
 Package: mlstm
 Type: Package
 Title: Multilevel Supervised Topic Models with Multiple Outcomes in R
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Tomoya", "Himeno", email = "bd24f002@g.hit-u.ac.jp", role = c("aut", "cre"))
 Description: Provides functions for fitting latent Dirichlet allocation (LDA),
