@@ -15,3 +15,7 @@ set_threads(num_threads = NULL)
 - num_threads:
 
   Integer number of threads. If NULL, use (cores - 1).
+
+## Value
+
+Invisibly returns an integer giving the number of threads used.
