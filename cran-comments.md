@@ -1,6 +1,8 @@
-This is a resubmission.
+## Test environments
+- Windows 11, R 4.4.1
+- Local check: R CMD check --as-cran
 
-Changes in this version:
-- Fixed BLAS/LAPACK linking for non-Windows platforms.
-- Added RcppParallel linking to resolve missing TBB symbols.
-- Improved portability across Linux, macOS, and Windows.
+## R CMD check results
+0 errors | 0 warnings | 1 note
+
+* This note is due to inability to verify system time on Windows and can be ignored.

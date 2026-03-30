@@ -1,14 +1,15 @@
 Package: mlstm
 Type: Package
-Title: Multilevel Supervised Topic Models with Multiple Outcomes in R
-Version: 0.1.2
+Title: Multilevel Supervised Topic Models with Multiple Outcomes
+Version: 0.1.5
 Authors@R: 
     person("Tomoya", "Himeno", email = "bd24f002@g.hit-u.ac.jp", role = c("aut", "cre"))
-Description: Provides functions for fitting latent Dirichlet allocation (LDA),
-    supervised topic models (STM), and multilevel supervised topic models
-    for text data with multiple outcome variables. Core estimation routines
-    are implemented in C++ with Rcpp and support scalable variational
-    inference and parallel computation.
+Description: Fits latent Dirichlet allocation (LDA), supervised topic models,
+    and multilevel supervised topic models for text data with multiple
+    outcome variables. Core estimation routines are implemented in C++
+    using the 'Rcpp' ecosystem. For topic models, see Blei et al. (2003)
+    <doi:10.1023/A:1020626304982>. For supervised topic models, see
+    McAuliffe and Blei (2008) <https://papers.nips.cc/paper_files/paper/2007/hash/9f53d83ec0691550f7d2507d57f4f5a2-Abstract.html>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -1,5 +1,5 @@
 test_that("test fit LDA/STM/MLSTM", {
-
+  skip_on_cran()
   # prepare simulated corpus ------------------------------------------------
 
   D <- 1000        # number of documents

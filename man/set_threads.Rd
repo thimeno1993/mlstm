@@ -9,6 +9,9 @@ set_threads(num_threads = NULL)
 \arguments{
 \item{num_threads}{Integer number of threads. If NULL, use (cores - 1).}
 }
+\value{
+Invisibly returns an integer giving the number of threads used.
+}
 \description{
 This helper configures OpenMP/BLAS threads to ensure reproducible and
 stable performance across the low-level C++ routines used by the package.

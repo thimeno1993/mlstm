@@ -5,6 +5,8 @@
 #'
 #' @param num_threads Integer number of threads. If NULL, use (cores - 1).
 #'
+#' @return Invisibly returns an integer giving the number of threads used.
+#'
 #' @export
 set_threads <- function(num_threads = NULL) {
   if (is.null(num_threads)) {
