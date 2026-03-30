@@ -1,8 +1,6 @@
-## Test environments
-- Windows 11, R 4.4.1
-- Local check: R CMD check --as-cran
+This is a resubmission.
 
-## R CMD check results
-0 errors | 0 warnings | 1 note
+I corrected the invalid DOI in the DESCRIPTION file by replacing it with valid reference links for Blei et al. (2003) and Blei and McAuliffe (2007).
 
-* This note is due to inability to verify system time on Windows and can be ignored.
+All issues raised have been addressed and the package now passes
+R CMD check --as-cran with no errors or warnings.
